@@ -6,8 +6,12 @@ import os
 # Modeli global olarak bir kere yüklüyoruz
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
-# Docker içindeki yol (Docker volume ile buraya eşleyeceğiz)
+# Docker içindeki yol veya local yol
 CSV_PATH = "/app/data/used_cars.csv"
+if not os.path.exists(CSV_PATH):
+    # Eğer Docker değilse, local path kullan
+    CSV_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "used_cars.csv")
+    CSV_PATH = os.path.normpath(CSV_PATH)
 
 def load_data():
     """CSV dosyasını yükler ve temizler"""
@@ -52,6 +56,11 @@ def get_hybrid_recommendation(user_req):
     # 2. ADIM: AI İLE ANLAMSAL ARAMA (Soft Filter)
     # Araç özelliklerini tek bir metinde birleştir
     # CSV Sütunları: brand, model, transmission, engine, fuel_type, ext_col
+    # NaN değerleri boş string ile değiştir
+    text_columns = ['brand', 'model', 'transmission', 'engine', 'fuel_type', 'ext_col']
+    for col in text_columns:
+        filtered_df[col] = filtered_df[col].fillna('').astype(str)
+    
     filtered_df['text_repr'] = (
         filtered_df['brand'] + " " + 
         filtered_df['model'] + " " + 
