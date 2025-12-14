@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    container_name: car_recom
+    ports:
+      - "8000:8000"
+    volumes:
+      # Senin bilgisayarındaki 'data' klasörünü konteynere bağlıyoruz
+      - ./data:/app/data
+    restart: always
