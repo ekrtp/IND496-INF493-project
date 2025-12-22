@@ -9,7 +9,7 @@ python -m venv .venv
 
 (for mac)
 ```bash
-./venv/bin/activate
+source .venv/bin/activate
 ```
 
 ```bash
@@ -25,12 +25,22 @@ pip install -r requirements.txt
 (manuel)
 Terminal 1 (Backend):
 ```bash
-.\.venv\Scripts\Activate.ps1
+# Windows PowerShell
+\.\.venv\Scripts\Activate.ps1
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+# macOS / Linux (zsh/bash)
+source .venv/bin/activate
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 Terminal 2 (Streamlit UI):
 ```bash
-.\.venv\Scripts\Activate.ps1
+# Windows PowerShell
+\.\.venv\Scripts\Activate.ps1
+streamlit run streamlit_app.py
+
+# macOS / Linux (zsh/bash)
+source .venv/bin/activate
 streamlit run streamlit_app.py
 ```
 ---
